@@ -1,20 +1,20 @@
 "use client";
 
-import { useTheme } from "next-themes";
+
 import Image from "next/image";
 import Link from "next/link";
 import { FaTwitter, FaGithub, FaLinkedin } from "react-icons/fa";
 
 export default function Footer() {
-  const { theme } = useTheme();
+
 
   return (
     <div className="py-8 px-6 md:px-16 bg-[#0D0D2B] text-gray-400 border-t border-gray-700 mt-10">
       <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-        {/* Logo and Name */}
+     
         <Link href="/" className="flex items-center space-x-3">
           <Image
-            src="/Logo.png" // ✅ No "/public" in the path
+            src="/Logo.png" 
             alt="StackScripts Logo"
             width={40}
             height={40}
@@ -24,8 +24,6 @@ export default function Footer() {
             Stack<span className="text-blue-500">Scripts</span>
           </span>
         </Link>
-
-        {/* Centered Policy Links */}
         <div className="flex space-x-6 text-sm text-gray-400 z-50">
         <Link
   href="/terms"
@@ -60,7 +58,6 @@ export default function Footer() {
 
         </div>
 
-        {/* Social Media Icons */}
         <div className="flex space-x-5 z-50">
           <Link href="https://twitter.com/yourprofile" target="_blank">
             <FaTwitter className="w-6 h-6 text-gray-400 hover:text-blue-500 transition" />

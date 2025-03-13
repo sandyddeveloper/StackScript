@@ -6,13 +6,20 @@ import { loadSlim } from "@tsparticles/slim";
 import { Engine, Container } from "@tsparticles/engine";
 import Particles from "@tsparticles/react";
 
+declare global {
+  interface Window {
+    tsParticles: Engine;
+  }
+}
 const Hero = () => {
-  // Initialize particles inside useEffect
   useEffect(() => {
     const initParticles = async (engine: Engine) => {
       await loadSlim(engine);
     };
-    initParticles((window as any).tsParticles);
+    
+    if (window.tsParticles) {
+      initParticles(window.tsParticles);
+    }
   }, []);
 
   const particlesLoaded = useCallback(async (container?: Container) => {
@@ -45,7 +52,7 @@ const Hero = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
       >
-        Hi, I'm <span className="text-blue-400">Santhosh Raj</span>
+        Hi, I&apos;m <span className="text-blue-400">Santhosh Raj</span>
       </motion.h1>
 
       <motion.p
@@ -70,7 +77,7 @@ const Hero = () => {
         Welcome to <span className="text-blue-400 font-semibold">StackScripts</span>!  
         A place where technology meets creativity. Enjoy high-quality content,  
         tutorials, and deep insights into web development, AI, and more.  
-        Let's build something amazing together!
+        Let&apos;s build something amazing together!
       </motion.p>
 
       {/* Call to Action */}
@@ -92,7 +99,8 @@ const Hero = () => {
 </motion.a>
 
 <motion.a
-  href="https://github.com/yourgithub"
+  href="https://github.com/sandyddeveloper"
+  target="_blank"
   whileHover={{ scale: 1.1 }}
   transition={{ duration: 0.3 }}
   className="bg-gray-800 text-white px-6 py-3 rounded-full shadow-lg hover:bg-gray-700 transition-all text-lg z-[10001] cursor-pointer flex items-center gap-2"

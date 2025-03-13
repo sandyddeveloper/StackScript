@@ -29,7 +29,7 @@ const Blog = () => {
   };
 
   return (
-    <div>
+    <div id="blog">
       <h2 className="text-3xl font-extrabold text-center py-5">
         🚀 Latest <span className="text-blue-600">Blog Posts</span>
       </h2>

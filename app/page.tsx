@@ -1,7 +1,8 @@
 "use client";
+
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-import Hero from "@/components/Hero ";
+
 
 import { Container, Engine } from "@tsparticles/engine";
 import { loadSlim } from "@tsparticles/slim";
@@ -9,18 +10,29 @@ import { loadSlim } from "@tsparticles/slim";
 import { useCallback, useEffect } from "react";
 import Particles from "@tsparticles/react";
 import Blog from "@/components/Blog";
+import Hero from "@/components/Hero ";
+
+declare global {
+  interface Window {
+    tsParticles: Engine;
+  }
+}
 
 export default function Home() {
-   useEffect(() => {
-      const initParticles = async (engine: Engine) => {
-        await loadSlim(engine);
-      };
-      initParticles((window as any).tsParticles);
-    }, []);
-  
-    const particlesLoaded = useCallback(async (container?: Container) => {
-      console.log("Particles Loaded:", container);
-    }, []);
+  useEffect(() => {
+    const initParticles = async (engine: Engine) => {
+      await loadSlim(engine);
+    };
+    
+    if (window.tsParticles) {
+      initParticles(window.tsParticles);
+    }
+  }, []);
+
+  const particlesLoaded = useCallback(async (container?: Container) => {
+    console.log("Particles Loaded:", container);
+  }, []);
+
   return (
     <div className="relative">
       {/* Background Animation */}
@@ -30,7 +42,7 @@ export default function Home() {
         options={{
           fullScreen: { enable: false },
           particles: {
-            number: { value:  100},
+            number: { value: 100 },
             color: { value: "#00ccff" },
             shape: { type: "circle" },
             opacity: { value: 0.6 },
@@ -39,19 +51,18 @@ export default function Home() {
           },
         }}
       />
-    <div className="dark:bg-[#0D0D2B] ">
-      <Header />
+      <div className="dark:bg-[#0D0D2B]">
+        <Header />
 
-      {/* hero */}
-      <main className="bg-[#0D0D2B] text-white">
-      <Hero />
-    </main>
+        {/* Hero Section */}
+        <main className="bg-[#0D0D2B] text-white">
+          <Hero />
+        </main>
 
-<Blog />
-</div>
+        <Blog />
+      </div>
 
       <Footer />
     </div>
-    
   );
 }
