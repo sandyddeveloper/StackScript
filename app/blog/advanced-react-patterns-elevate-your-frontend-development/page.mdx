@@ -1,0 +1,193 @@
+import MdxLayout from "@/components/mdx-layout";
+
+<MdxLayout>
+
+
+# 🚀 Advanced React Patterns: Elevate Your Frontend Development
+
+React has revolutionized frontend development with its component-based architecture. However, as applications grow, managing complexity becomes a challenge. Advanced React patterns help developers build scalable, maintainable, and efficient React applications.
+
+## 1. Higher-Order Components (HOCs)
+
+HOCs are functions that take a component and return a new component with additional functionality. This pattern is useful for reusing logic such as authentication, logging, or theming.
+
+### Example: Authentication HOC
+```tsx
+import React from "react";
+import { useAuth } from "../hooks/useAuth";
+
+const withAuth = (Component: React.FC) => {
+  return (props: any) => {
+    const { isAuthenticated } = useAuth();
+    if (!isAuthenticated) {
+      return <p>Please log in to continue.</p>;
+    }
+    return <Component {...props} />;
+  };
+};
+
+export default withAuth;
+```
+
+### When to Use HOCs:
+- Adding shared logic across multiple components.
+- Implementing role-based authentication or theming.
+
+## 2. Render Props
+
+Render Props allow components to share behavior using a function that returns UI elements.
+
+### Example: Mouse Tracking Component
+```tsx
+const MouseTracker = ({ render }: { render: (position: { x: number, y: number }) => JSX.Element }) => {
+  const [position, setPosition] = React.useState({ x: 0, y: 0 });
+
+  React.useEffect(() => {
+    const handleMouseMove = (event: MouseEvent) => {
+      setPosition({ x: event.clientX, y: event.clientY });
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
+  return render(position);
+};
+
+export default MouseTracker;
+```
+
+### Usage:
+```tsx
+<MouseTracker render={({ x, y }) => <h2>Mouse Position: {x}, {y}</h2>} />
+```
+
+### When to Use Render Props:
+- When logic needs to be shared but UI varies.
+- Handling complex UI interactions.
+
+## 3. Compound Components
+
+Compound components allow components to work together while keeping their logic encapsulated. This is useful for building flexible UI elements like tabs, modals, and dropdowns.
+
+### Example: Custom Tabs Component
+```tsx
+const Tabs = ({ children }: { children: React.ReactNode }) => {
+  const [activeIndex, setActiveIndex] = React.useState(0);
+  return (
+    <div>
+      {React.Children.map(children, (child, index) =>
+        React.cloneElement(child as React.ReactElement, {
+          activeIndex,
+          setActiveIndex,
+        })
+      )}
+    </div>
+  );
+};
+
+const Tab = ({ label, index, activeIndex, setActiveIndex }: any) => (
+  <button
+    className={activeIndex === index ? "bg-blue-500 text-white" : "bg-gray-200"}
+    onClick={() => setActiveIndex(index)}
+  >
+    {label}
+  </button>
+);
+
+export { Tabs, Tab };
+```
+
+### Usage:
+```tsx
+<Tabs>
+  <Tab label="Tab 1" index={0} />
+  <Tab label="Tab 2" index={1} />
+</Tabs>
+```
+
+### When to Use Compound Components:
+- When you need to provide a better API for complex components.
+- For UI elements like accordions, modals, and tooltips.
+
+## 4. Controlled vs. Uncontrolled Components
+
+React provides two ways to handle form inputs: **controlled** and **uncontrolled** components.
+
+### Controlled Component Example:
+```tsx
+const ControlledInput = () => {
+  const [value, setValue] = React.useState("");
+  return (
+    <input
+      type="text"
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+    />
+  );
+};
+```
+
+### Uncontrolled Component Example:
+```tsx
+const UncontrolledInput = () => {
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  
+  const handleSubmit = () => {
+    alert(inputRef.current?.value);
+  };
+  
+  return (
+    <div>
+      <input type="text" ref={inputRef} />
+      <button onClick={handleSubmit}>Submit</button>
+    </div>
+  );
+};
+```
+
+### When to Use:
+- **Controlled Components**: When you need real-time validation, form state management, or integration with external state management (Redux, Zustand, etc.).
+- **Uncontrolled Components**: When dealing with simple forms where direct DOM interaction is sufficient.
+
+## 5. React Context & Custom Hooks
+
+Context API and custom hooks help in state management without prop drilling.
+
+### Example: Theme Context
+```tsx
+const ThemeContext = React.createContext({ theme: "light", toggleTheme: () => {} });
+
+const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
+  const [theme, setTheme] = React.useState("light");
+
+  const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light");
+
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+};
+
+export { ThemeContext, ThemeProvider };
+```
+
+### Using Context in a Component:
+```tsx
+const ThemedComponent = () => {
+  const { theme, toggleTheme } = React.useContext(ThemeContext);
+  return (
+    <div className={theme === "light" ? "bg-white" : "bg-black text-white"}>
+      <button onClick={toggleTheme}>Toggle Theme</button>
+    </div>
+  );
+};
+```
+
+## Conclusion
+
+Using these advanced React patterns will help you build scalable, reusable, and maintainable applications. Whether you're working with HOCs, Render Props, Compound Components, or Context, applying the right pattern at the right time is key to efficient development.
+
+**Happy coding! 🚀**
+
+</MdxLayout>

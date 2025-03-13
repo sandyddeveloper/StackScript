@@ -1,0 +1,219 @@
+import MdxLayout from "@/components/mdx-layout";
+
+<MdxLayout>
+
+# Title: Deploying Django Apps with Docker and Kubernetes 🚀  
+
+Deploying a Django application using **Docker** and **Kubernetes** allows for scalable, containerized deployments. Below is a step-by-step guide to containerizing and deploying a Django app with **Docker** and **Kubernetes (K8s)**.
+
+---
+
+## **Step 1: Setting Up Docker for Django**  
+
+### **1.1 Install Docker**  
+Ensure **Docker** is installed on your system:  
+- [Download Docker](https://www.docker.com/get-started)  
+
+### **1.2 Create a `Dockerfile`**  
+
+Inside your Django project root, create a `Dockerfile`:  
+
+```dockerfile
+# Use official Python image as base
+FROM python:3.10
+
+# Set environment variables
+ENV PYTHONUNBUFFERED 1
+
+# Set work directory
+WORKDIR /app
+
+# Copy dependencies
+COPY requirements.txt /app/
+
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy project files
+COPY . /app/
+
+# Expose port 8000 for Django
+EXPOSE 8000
+
+# Run Django server
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "your_project.wsgi:application"]
+```
+
+### **1.3 Create a `.dockerignore` File**  
+Exclude unnecessary files to reduce image size:  
+
+```
+__pycache__/
+*.pyc
+*.pyo
+.env
+db.sqlite3
+```
+
+---
+
+## **Step 2: Create a `docker-compose.yml` (Optional for Local Dev)**  
+To run **PostgreSQL** alongside Django, create a `docker-compose.yml` file:  
+
+```yaml
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  web:
+    build: .
+    container_name: django_app
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgres://user:password@db:5432/mydb
+    command: ["gunicorn", "--bind", "0.0.0.0:8000", "your_project.wsgi:application"]
+
+volumes:
+  pgdata:
+```
+
+Run the containers:  
+```sh
+docker-compose up --build -d
+```
+
+---
+
+## **Step 3: Deploy Django with Kubernetes (K8s)**  
+
+### **3.1 Create Kubernetes Deployment for Django**  
+
+Inside a `k8s` directory, create `django-deployment.yml`:  
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: django
+  template:
+    metadata:
+      labels:
+        app: django
+    spec:
+      containers:
+        - name: django-container
+          image: your-dockerhub-username/django-app:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DATABASE_URL
+              value: "postgres://user:password@postgres-service:5432/mydb"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: django-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: django
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+```
+
+### **3.2 Create a PostgreSQL Deployment (`postgres-deployment.yml`)**  
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15
+          env:
+            - name: POSTGRES_DB
+              value: mydb
+            - name: POSTGRES_USER
+              value: user
+            - name: POSTGRES_PASSWORD
+              value: password
+          ports:
+            - containerPort: 5432
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+spec:
+  ports:
+    - port: 5432
+  selector:
+    app: postgres
+```
+
+### **3.3 Apply Kubernetes Configurations**  
+
+Deploy to Kubernetes:  
+```sh
+kubectl apply -f k8s/
+```
+
+Check status:  
+```sh
+kubectl get pods
+kubectl get services
+```
+
+---
+
+## **Step 4: Scale the Application**
+Increase the number of replicas for better load balancing:  
+```sh
+kubectl scale deployment django-deployment --replicas=3
+```
+
+---
+
+## **Step 5: Expose the Application**
+To access the app externally, get the external IP:  
+```sh
+kubectl get svc django-service
+```
+
+You can now deploy this setup on **AWS EKS, GCP GKE, or DigitalOcean Kubernetes** for production use! 🚀  
+
+
+
+</MdxLayout>

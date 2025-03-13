@@ -1,0 +1,90 @@
+import MdxLayout from "@/components/mdx-layout";
+
+<MdxLayout>
+---
+title: "Python 3.12: New Features and Performance Boosts"
+date: "2025-03-13"
+author: "Santhoshraj"
+description: "A deep dive into Python 3.12's new features, performance improvements, and notable changes."
+---
+
+import { CodeBlock } from "@/components/CodeBlock";
+
+## 🚀 Python 3.12: New Features and Performance Boosts
+
+Python 3.12 brings **major improvements** in terms of **performance**, **syntax enhancements**, and **security**. Let's explore what's new in this release!
+
+---
+
+## 🔥 Performance Improvements
+
+### 1️⃣ Faster CPython Execution
+Python 3.12 includes enhancements that improve the speed of CPython by optimizing **internals, bytecode execution, and memory usage**.
+
+> Benchmarks suggest a **5-10% speed improvement** in real-world applications compared to Python 3.11.
+
+### 2️⃣ Optimized Frame Stack Handling
+A major refactor of frame objects has **reduced memory overhead** and improved **function call performance**.
+
+```python
+import dis
+
+def sample_function():
+    return sum([i for i in range(10)])
+
+print(dis.dis(sample_function))  # Improved bytecode execution
+```
+
+---
+
+## 🎯 New Features in Python 3.12
+
+### 1️⃣ **Enhanced f-string Debugging**
+Python 3.12 makes debugging easier with enhanced `f-strings`.
+
+```python
+x, y = 10, 20
+print(f"{x + y = }")  # Output: x + y = 30
+```
+
+### 2️⃣ **More Flexible Type Hints**
+Type annotations have improved, making static typing more powerful.
+
+```python
+from typing import Self
+
+class Example:
+    def chain(self) -> Self:
+        return self  # Uses Self instead of Example
+```
+
+### 3️⃣ **New `except*` Syntax for Exception Groups**
+Introduces structured error handling for handling multiple exceptions.
+
+```python
+try:
+    raise ExceptionGroup("Errors", [ValueError("Invalid"), TypeError("Wrong Type")])
+except* ValueError as e:
+    print("Caught ValueError:", e)
+except* TypeError as e:
+    print("Caught TypeError:", e)
+```
+
+---
+
+## 🛠️ Deprecated Features and Changes
+
+- **Python 3.12 removes legacy Unicode C APIs** for better Unicode handling.
+- `distutils` module is **fully removed**; use `setuptools` instead.
+- Some older syntax patterns now raise **SyntaxWarnings**.
+
+---
+
+## 📌 Conclusion
+
+Python 3.12 is a **faster, more efficient, and more developer-friendly** update with notable syntax improvements and performance gains. Upgrade today and take advantage of these **powerful new features**!
+
+### 🔗 **References**
+- [Official Python 3.12 Release Notes](https://docs.python.org/3.12/whatsnew/3.12.html)
+
+</MdxLayout>

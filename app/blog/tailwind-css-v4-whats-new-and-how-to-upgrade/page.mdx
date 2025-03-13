@@ -1,0 +1,98 @@
+import MdxLayout from "@/components/mdx-layout";
+
+<MdxLayout>
+
+# 🚀 Tailwind CSS v4: What's New and How to Upgrade
+
+##  Introduction
+Tailwind CSS v4 is here, bringing a host of new features, improved performance, and breaking changes. Whether you're starting fresh or upgrading an existing project, this guide will help you understand what's new and how to transition smoothly.
+
+## 🆕 What's New in Tailwind CSS v4?
+
+### 1️⃣ Performance Boost with Rust-based Engine
+Tailwind CSS v4 introduces a **Rust-based compiler**, replacing the previous JavaScript-based system. This change results in **faster build times** and improved performance.
+
+```bash
+# Upgrade Tailwind CSS
+npm install -D tailwindcss@latest
+```
+
+### 2️⃣ Simplified Configuration
+The default `tailwind.config.js` is now more concise, thanks to automatic class detection and improved handling of utility layers.
+
+**Before (Tailwind v3):**
+```js
+module.exports = {
+  content: ["./src/**/*.{js,ts,jsx,tsx}"],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+};
+```
+
+**After (Tailwind v4):**
+```js
+export default {
+  content: ["./src/**/*.{js,ts,jsx,tsx}"]
+};
+```
+
+### 3️⃣ Improved Dark Mode
+Tailwind v4 introduces **`dark:media` mode**, which uses system preferences for a seamless dark mode experience.
+
+```html
+<div class="dark:bg-gray-900 dark:text-white p-4">
+  This is in dark mode!
+</div>
+```
+
+### 4️⃣ New Utility Classes
+- **Grid Auto Layout:** `grid-auto-rows`, `grid-auto-cols`
+- **New Text Utilities:** `text-balance`, `text-pretty`
+- **CSS Variable Support:** Native support for `var(--custom-color)`
+
+```html
+<p class="text-pretty text-lg">This text is beautifully spaced.</p>
+```
+
+## 🔄 How to Upgrade from Tailwind CSS v3 to v4
+
+### Step 1: Update Tailwind CSS
+Run the following command to install the latest version:
+```bash
+npm install -D tailwindcss@latest
+```
+
+### Step 2: Check for Deprecated Features
+Tailwind v4 removes some legacy classes and configurations. Check your project for:
+- Deprecated dark mode configurations
+- Unused plugins or custom variants
+
+### Step 3: Migrate Configuration
+If you are using CommonJS, switch to ESM for the configuration file:
+```bash
+mv tailwind.config.js tailwind.config.mjs
+```
+
+Modify the file:
+```js
+export default {
+  content: ["./src/**/*.{js,ts,jsx,tsx}"]
+};
+```
+
+### Step 4: Test and Optimize
+Run your project and test for any missing styles or errors:
+```bash
+npm run dev
+```
+
+## 🎯 Conclusion
+Tailwind CSS v4 is a game-changer for modern frontend development, offering **faster builds, cleaner configurations, and new utilities**. Upgrading is straightforward, and the improvements make it worth the effort.
+
+Are you excited about Tailwind CSS v4? Let us know in the comments! 🚀
+
+
+
+</MdxLayout>
